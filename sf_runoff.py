@@ -39,6 +39,16 @@ def shift_series_(s, shift_range,t_unit):
     return pd.concat(s_shifts, axis=1)
 
 
+def create_in_matrix(daily_input, t_length,t_unit):
+
+    # Compute the t_unit days average temperature
+    if not daily_input.empty:
+        daily_input_t_unit = daily_input.rolling(t_unit, min_periods=t_unit).mean()
+        output = pd.concat([shift_series_(daily_input_t_unit[col], (-t_length + 1, 1),t_unit) for col in daily_input_t_unit], axis=1)
+
+    return output;
+
+
 def create_it_matrix(daily_input, t_length,t_unit):
 
     # This function takes as input the daily temperature, precipitation and runoff and generates the input-target matrix
